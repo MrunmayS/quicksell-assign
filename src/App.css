@@ -43,5 +43,9 @@
 .controls {
   margin-bottom: 10px;
 }
-
-/* Add other styles as needed */
+.favicon {
+  width: 20px;
+  height: 20px; 
+  border-radius: 50%; 
+  margin-right: 8px; 
+}

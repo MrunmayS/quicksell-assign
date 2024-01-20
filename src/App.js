@@ -10,7 +10,7 @@ const App = () => {
   const [sortOption, setSortOption] = useState('priority');
 
   useEffect(() => {
-    // Load saved grouping and sorting options from localStorage
+
     const groupingOption = localStorage.getItem('groupingOption');
     const sortOption = localStorage.getItem('sortOption');
 
@@ -25,7 +25,7 @@ const App = () => {
       setSortOption(sortOption);
     }
 
-    // Fetch data from the API and update state
+
     fetch('https://api.quicksell.co/v1/internal/frontend-assignment')
       .then(response => response.json())
       .then(data => {
@@ -38,10 +38,10 @@ const App = () => {
         setError('Error fetching data from the API');
         setLoading(false);
       });
-  }, []); // Run only on the initial render
+  }, []);
 
   useEffect(() => {
-    // Save grouping and sorting options to localStorage
+
     localStorage.setItem('groupingOption', groupingOption);
     localStorage.setItem('sortOption', sortOption);
   }, [groupingOption, sortOption]);
@@ -114,10 +114,12 @@ const App = () => {
   };
 
   const handleDisplayClick = () => {
-    // Additional logic for displaying based on user's selections
-    // This could involve further API requests or local data processing
   };
 
+  const handleFeatureRequest = (taskId) => {
+    console.log(`Feature request for task ID ${taskId}`);
+
+  };
   
 
   const renderTickets = () => {
@@ -132,12 +134,12 @@ const App = () => {
     const groupedTickets = groupTickets();
     const sortedTickets = sortTickets(groupedTickets);
   
-    // Create an object to hold tickets for each group
+
     const groupedColumns = {};
   
     sortedTickets.forEach(ticket => {
       const groupValue = getGroupValue(ticket, groupingOption);
-      
+  
       if (!groupedColumns[groupValue]) {
         groupedColumns[groupValue] = [];
       }
@@ -145,7 +147,7 @@ const App = () => {
       groupedColumns[groupValue].push(ticket);
     });
   
-    // Render columns for each group
+
     const columns = Object.keys(groupedColumns).map(groupValue => (
       <div key={groupValue} className="column">
         <h2>{getGroupLabel(groupValue, groupingOption)}</h2>
@@ -155,7 +157,18 @@ const App = () => {
             <p>Task ID: {ticket.id}</p>
             <p>User: {getUserById(ticket.userId)?.name}</p>
             <p>Priority: {getPriorityLabel(ticket.priority)}</p>
-            {/* Add other ticket details as needed */}
+            
+            {}
+            <button onClick={() => handleFeatureRequest(ticket.id)}>Feature Request</button>
+  
+            {}
+            {getUserById(ticket.userId) && (
+              <img
+                src={`favicon/icons8-user-96.png`}
+                alt={`${getUserById(ticket.userId)?.name}'s Favicon`}
+                className="favicon"
+              />
+            )}
           </div>
         ))}
       </div>
@@ -164,7 +177,7 @@ const App = () => {
     return <div className="columns">{columns}</div>;
   };
   
-  // Helper function to get the value for grouping
+
   const getGroupValue = (ticket, groupingOption) => {
     switch (groupingOption) {
       case 'status':
@@ -178,7 +191,7 @@ const App = () => {
     }
   };
   
-  // Helper function to get the label for grouping
+
   const getGroupLabel = (groupValue, groupingOption) => {
     switch (groupingOption) {
       case 'status':
@@ -187,7 +200,7 @@ const App = () => {
         const user = getUserById(groupValue);
         return user ? `${user.name}` : 'Unassigned';
       case 'priority':
-        return getPriorityLabel(parseInt(groupValue)); // Parse the groupValue to an integer
+        return getPriorityLabel(parseInt(groupValue)); 
       default:
         return null;
     }
